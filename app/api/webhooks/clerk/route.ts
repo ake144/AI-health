@@ -3,10 +3,12 @@ import prisma from '@/utils/db';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-
+import { currentUser } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
     try {
+
+        // const user = await currentUser();
         // Parse the Clerk Webhook event
         const evt = (await req.json()) as WebhookEvent;
 
@@ -21,7 +23,7 @@ export async function POST(req: Request) {
         let user = null;
         switch (evt.type) {
             case 'user.created': {
-                user = await prisma.user.upsert({
+                user = await prisma.users.upsert({
                     where: {
                         clerkUserId,
                     },
@@ -30,12 +32,16 @@ export async function POST(req: Request) {
                     },
                     create: {
                         clerkUserId,
+                        age: 0,
+                        weight: 0,
+                        height: 0,
+                        goals: '',
                     },
                 });
                 break;
             }
             case 'user.deleted': {
-                user = await prisma.user.delete({
+                user = await prisma.users.delete({
                     where: {
                         clerkUserId,
                     },

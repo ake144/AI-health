@@ -4,9 +4,8 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-const BlogPost = ({ params }: {slug: string, params: any}) => {
+const BlogPost = () => {
   const router = useRouter();
-  const { slug } = params;
   const post = {
     title: "The Essence of Minimalism",
     author: "Zen Master",
