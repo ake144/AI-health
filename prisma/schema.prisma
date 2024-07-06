@@ -15,9 +15,11 @@ datasource db {
 
 
 
+
 model Users {
   id                     Int      @id @default(autoincrement())
   age                    Int
+  username               String   @unique
   weight                 Float
   height                 Float
   fitnessLevel         String?
@@ -29,6 +31,8 @@ model Users {
    clerkUserId           String?      @unique
   recommendations        Recommendation[]
 }
+
+
 
 model Recommendation {
   id              Int      @id @default(autoincrement())

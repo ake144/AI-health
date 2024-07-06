@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Button } from "../ui/button"
 import ShinyButton from "../magicui/button"
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 
 
 export function NavigationMenuDemo() {
@@ -45,13 +46,21 @@ export function NavigationMenuDemo() {
       </NavigationMenuList>
     </NavigationMenu>
    
+   
+
     <div className="ml-[100px]  flex flex-row gap-3">
-      <Link href='/auth/login'>
+         <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+      {/* <Link href='/auth/login'>
         <ShinyButton text="Log In" />
        </Link>
        <Link href='/auth/signup'>
           <Button className="rounded-full  flex justify-end items-end">start for free</Button>
-        </Link>
+        </Link> */}
     </div>
     
     </div>

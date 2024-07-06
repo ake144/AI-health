@@ -3,8 +3,6 @@ import prisma from '@/utils/db';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-import { currentUser } from '@clerk/nextjs/server';
-
 export async function POST(req: Request) {
     try {
 
@@ -32,6 +30,7 @@ export async function POST(req: Request) {
                     },
                     create: {
                         clerkUserId,
+                        username: '',
                         age: 0,
                         weight: 0,
                         height: 0,
