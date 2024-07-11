@@ -1,11 +1,19 @@
+import Link from 'next/link'
 import React from 'react'
 
 function BlogPot() {
   return (
     <>
-    <h2 className='mt-9  flex items-center justify-center'>
-                Explore our latest blog posts
+<div className='flex flex-row'>
+ <Link href='/'>
+  <div className='mx-2 p-7'>
+    Back
+  </div>
+  </Link> 
+    <h2 className='mt-[50px] p-3 text-4xl  flex items-center justify-center'>
+                Explore  latest posts
     </h2>
+    </div>
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 mx-4 mt-7 lg:grid-cols-3">
     <article className="overflow-hidden rounded-lg shadow transition hover:shadow-lg">
   <img

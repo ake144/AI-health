@@ -4,7 +4,7 @@ export function MagicCardDemo() {
   return (
     <MagicContainer
       className={
-        "flex h-[400px] w-100% mt-5  flex-col gap-4 lg:h-[250px] lg:flex-row"
+        "flex h-[400px] lg:w-100% mt-5 lg:mb-2 p-4 mb-[100px] w-[1000px]   flex-col gap-4 lg:h-[250px] lg:flex-row"
       }
     >
       <MagicCard className="flex w-1/3 cursor-pointer flex-col items-center justify-center overflow-hidden p-20 shadow-2xl">

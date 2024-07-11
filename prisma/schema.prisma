@@ -37,10 +37,7 @@ model Users {
 model Recommendation {
   id              Int      @id @default(autoincrement())
   userId          Int
-  exercise_plan   Json
-  dietary_suggestions Json
-  potential_risks Json
-  expert_advice   Json
+  recommendations Json     // Single JSON field to store all recommendation details
   createdAt       DateTime @default(now())
-  user            Users     @relation(fields: [userId], references: [id])
+  user            Users    @relation(fields: [userId], references: [id])
 }

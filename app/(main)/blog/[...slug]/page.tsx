@@ -2,6 +2,7 @@
 
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const BlogPost = () => {
@@ -42,6 +43,11 @@ const BlogPost = () => {
 
   return (
     <div className="max-w-6xl mx-auto lg:ml-[70px] lg:mt-[50px] mt-10  p-6">
+       <Link href='/'>
+        <div className='mb-2 p-3'>
+          Back
+        </div>
+        </Link> 
       <div className="flex flex-col md:flex-row">
         <div className="md:w-2/3">
           <h1 className="text-4xl font-bold mb-4">{post.title}</h1>

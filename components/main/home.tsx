@@ -5,6 +5,7 @@ import { AnimatedListDemo } from '../dock'
 import { MagicCardDemo } from '../card'
 import { BoxRevealDemo } from '../box'
 import PricingPage from '../pricing'
+import HowWorks from '../howWorks'
 
 function MainPage() {
   return (
@@ -25,7 +26,12 @@ function MainPage() {
       <div  className='flex justify-center items-center'>
       <BoxRevealDemo  />
       </div>
-      <div>
+<div className="mt-9 mx-8">
+
+<HowWorks/>
+</div>
+
+      <div  className='' id='price'>
       <PricingPage />
       </div>
     </div>

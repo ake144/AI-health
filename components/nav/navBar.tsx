@@ -27,22 +27,26 @@ export function NavigationMenuDemo() {
     <NavigationMenu>
       <NavigationMenuList >
         <NavigationMenuItem>
-              <NavigationMenuLink  href='/auth'>Getting started</NavigationMenuLink>
+              <NavigationMenuLink  href='/'>Getting started</NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-            <NavigationMenuLink href="/track" className={navigationMenuTriggerStyle()}>
-              track
+            <NavigationMenuLink href="/user" className={navigationMenuTriggerStyle()}>
+              Track
             </NavigationMenuLink>
          
         </NavigationMenuItem>
+     
+        <NavigationMenuItem>
+            <NavigationMenuLink href="/price" className={navigationMenuTriggerStyle()}>
+              Price
+            </NavigationMenuLink>
+         
+        </NavigationMenuItem>
+
         <NavigationMenuItem>
          
              <NavigationMenuLink   href='/blog'>Blogs</NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-             <NavigationMenuLink  href='/price'>Price</NavigationMenuLink>
-
-        </NavigationMenuItem> 
       </NavigationMenuList>
     </NavigationMenu>
    

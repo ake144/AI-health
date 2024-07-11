@@ -14,10 +14,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@radix-ui/react-select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { createRecommendation } from "@/utils/actions/recommend";
+import {  getUserById } from "@/utils/actions/getuser";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+
 
 
 const formSchema = z.object({
@@ -42,7 +50,28 @@ const formSchema = z.object({
 });
 
 export function UserInfo() {
-  const [recommendations, setRecommendations] = useState<string>("");
+
+  const [userData, setUserData] = useState<any>(null);
+  const { user, isLoaded, isSignedIn } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (isSignedIn && isLoaded && user?.id) {
+        try {
+          const userData = await getUserById(user.id);
+          setUserData(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [isSignedIn, isLoaded, user]);
+
+
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,14 +87,14 @@ export function UserInfo() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: any) => {
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data), // Send form data as JSON
+        body: JSON.stringify(data),
       });
 
       if (!res.ok) {
@@ -73,12 +102,26 @@ export function UserInfo() {
       }
 
       const result = await res.json();
-      setRecommendations(result.recommendations); // Update state with recommendations
+      console.log("AI response:", result);
+
+      const recommendations = JSON.stringify(result.data);
+
+      await createRecommendation({
+        recommendations,
+        userId: userData.id,
+      });
+
+      router.push('/recommendation');
+
     } catch (error) {
       console.error('Error generating content:', error);
     }
   };
 
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
+  
   return (
     <>
     <Form {...form}>
@@ -90,7 +133,7 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your username" {...field} />
+                <Input placeholder="Enter your username" defaultValue={userData.username} {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -106,7 +149,7 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Age</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Enter your age" {...field}  onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)} />
+                <Input type="number" placeholder="Enter your age" {...field}   defaultValue={userData.age} onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -119,7 +162,7 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Weight (kg)</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Enter your weight in kg" {...field}  onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)}/>
+                <Input type="number" placeholder="Enter your weight in kg" {...field}  defaultValue={userData.weight}   onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)}/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -132,7 +175,7 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Height (cm)</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Enter your height in cm" {...field} onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)} />
+                <Input type="number" placeholder="Enter your height in cm"   defaultValue={userData.height} {...field} onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -162,7 +205,7 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Health Conditions</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter any health conditions" {...field} id="healthCondition" />
+                <Textarea placeholder="Enter any health conditions"   defaultValue={userData.healthConditions} {...field} id="healthCondition" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -175,7 +218,7 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Goals</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter your fitness goals" {...field} />
+                <Textarea placeholder="Enter your fitness goals"   defaultValue={userData.goals} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -188,28 +231,17 @@ export function UserInfo() {
             <FormItem>
               <FormLabel>Current Exercise Routine</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe your current exercise routine" {...field} />
+                <Textarea placeholder="Describe your current exercise routine"  defaultValue={userData.currentExerciseRoutine}   {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+        <Button type="submit">Generate Recommendations</Button>
+        </form>
+      </Form>
 
-
-    <div className="mt-9 mx-6">
-            {recommendations.length > 0 && (
-              <div>
-                <h2 className="text-2xl font-bold">Recommendations</h2>
-                    {recommendations}
-              </div>
-            ) 
-            }
-
-    </div>
-
-  </>
+      
+    </>
   );
 }

@@ -1,5 +1,6 @@
-"use client";
+'use client';
 
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,24 +16,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@radix-ui/react-select";
-import { useState } from "react";
+import { Select } from "@/components/ui/select"; // Adjust this import based on your component structure
 import { useUser } from "@clerk/nextjs";
-import { useAuth } from '@clerk/nextjs';
-import { get } from "http";
 import { getUserById } from "@/utils/actions/getuser";
-
-
-interface UserSchema {
-  username: string;
-  age: number;
-  weight: number;
-  height: number;
-  fitnessLevel?: string;
-  healthConditions?: string;
-  goals: string;
-  currentExerciseRoutine?: string;
-}
+import scheduleEmails from "@/utils/scheduler";
+import { updateUser } from "@/utils/actions/updateUser"; // Ensure the import path is correct
+import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -49,53 +38,59 @@ const formSchema = z.object({
   }),
   fitnessLevel: z.enum(['Beginner', 'Intermediate', 'Advanced'], {
     required_error: "Fitness level is required.",
-  }),
+  }).optional(),
   healthConditions: z.string().optional(),
   goals: z.string(),
   currentExerciseRoutine: z.string().optional(),
 });
 
-async function UsersInfo() {
+const UsersInfo = () => {
+  const { user, isLoaded, isSignedIn } = useUser();
+  const [userData, setUserData] = useState<any>(null);
 
-    const {userId}  = useAuth()
+  useEffect(() => {
+    if (isSignedIn && isLoaded) {
+      getUserById(user.id)
+        .then((data) => setUserData(data))
+        .catch((error) => console.error(error));
+    }
+  }, [isSignedIn, isLoaded, user]);
 
-  
-    if(!userId) return null
+  console.log("userData", userData);
 
-    const user = await  getUserById(userId)
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: userData 
+  });
 
-    console.log("current user",user)
-  
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        username: '',
-        age: 0,
-        weight: 0,
-        height: 0,
-
-      },
-    });
+  useEffect(() => {
+    // Start the scheduler
+    scheduleEmails();
+  }, []);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      console.log(data);
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await updateUser({
+        id: user?.id, // Add user ID to the data object
+        ...data
       });
-      const responseData = await response.json();
-      console.log(responseData);
+      console.log("response",response);
     } catch (error) {
-      console.error('Error generating content:', error);
+      console.error('Error updating user:', error);
     }
   };
 
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
+       <Link href='/'>
+        <div className='mx-2 p-7'>
+          Back
+        </div>
+        </Link> 
       <h1 className="text-4xl font-bold mb-4">Users Info</h1>
       <p className="text-gray-600 mb-6">By User • Date</p>
       <Form {...form}>
@@ -107,7 +102,7 @@ async function UsersInfo() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your username" {...field} />
+                  <Input placeholder="Enter your username"  defaultValue={userData.username} {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -126,6 +121,7 @@ async function UsersInfo() {
                   <Input
                     type="number"
                     placeholder="Enter your age"
+                    defaultValue={userData.age}
                     {...field}
                     onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)}
                   />
@@ -144,6 +140,7 @@ async function UsersInfo() {
                   <Input
                     type="number"
                     placeholder="Enter your weight in kg"
+                    defaultValue={userData.weight}
                     {...field}
                     onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)}
                   />
@@ -161,6 +158,7 @@ async function UsersInfo() {
                 <FormControl>
                   <Input
                     type="number"
+                    defaultValue={userData.height}
                     placeholder="Enter your height in cm"
                     {...field}
                     onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)}
@@ -177,7 +175,9 @@ async function UsersInfo() {
               <FormItem>
                 <FormLabel>Fitness Level</FormLabel>
                 <FormControl>
-                  <Select {...field}>
+                  <Select  
+                  defaultValue={userData.fitnessLevel}
+                  {...field}>
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
                     <option value="Advanced">Advanced</option>
@@ -194,7 +194,7 @@ async function UsersInfo() {
               <FormItem>
                 <FormLabel>Health Conditions</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter any health conditions" {...field} />
+                  <Textarea  defaultValue={userData.healthConditions} placeholder="Enter any health conditions" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -207,7 +207,7 @@ async function UsersInfo() {
               <FormItem>
                 <FormLabel>Goals</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Enter your fitness goals" {...field} />
+                  <Textarea  defaultValue={userData.goals} placeholder="Enter your fitness goals" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -220,7 +220,7 @@ async function UsersInfo() {
               <FormItem>
                 <FormLabel>Current Exercise Routine</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Describe your current exercise routine" {...field} />
+                  <Textarea placeholder="Describe your current exercise routine" defaultValue={userData.currentExerciseRoutine} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -231,6 +231,6 @@ async function UsersInfo() {
       </Form>
     </div>
   );
-}
+};
 
 export default UsersInfo;
