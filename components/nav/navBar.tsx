@@ -43,6 +43,13 @@ export function NavigationMenuDemo() {
          
         </NavigationMenuItem>
 
+     
+        <NavigationMenuItem>
+         
+         <NavigationMenuLink   href='/calendar' className="mx-3">
+             Calendar
+         </NavigationMenuLink>
+    </NavigationMenuItem>
         <NavigationMenuItem>
          
              <NavigationMenuLink   href='/blog'>Blogs</NavigationMenuLink>

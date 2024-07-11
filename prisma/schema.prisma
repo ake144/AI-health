@@ -30,6 +30,7 @@ model Users {
   updatedAt              DateTime @updatedAt
    clerkUserId           String?      @unique
   recommendations        Recommendation[]
+  dates                   Calendar[]
 }
 
 
@@ -40,4 +41,15 @@ model Recommendation {
   recommendations Json     // Single JSON field to store all recommendation details
   createdAt       DateTime @default(now())
   user            Users    @relation(fields: [userId], references: [id])
+}
+
+
+
+model  Calendar {
+
+id                Int      @id  @default(autoincrement())
+userId            Int
+Dates             DateTime[]   
+user               Users      @relation(fields: [userId], references: [id])
+
 }
