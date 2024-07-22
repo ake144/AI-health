@@ -10,8 +10,7 @@ import PricingPage from '../pricing'
 import HowWorks from '../howWorks'
 
 
-function MainPage(req: Request) {
-
+function MainPage() {
 
   return (
 
