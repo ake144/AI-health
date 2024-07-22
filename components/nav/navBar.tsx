@@ -15,9 +15,13 @@ import {
 import { Button } from "../ui/button"
 import ShinyButton from "../magicui/button"
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
-
+import { useUser } from "@clerk/nextjs"
 
 export function NavigationMenuDemo() {
+
+  const user = useUser()
+  console.log("the userid", user)
+
   return (<>
   <div className="flex flex-row mt-10">
   <div className="lg:ml-[100px] mx-[60px] lg:mr-[270px]  ">

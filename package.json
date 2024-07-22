@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.15",
     "@clerk/nextjs": "^5.2.2",
     "@google/generative-ai": "^0.14.1",
     "@hookform/resolvers": "^3.7.0",
@@ -44,6 +45,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.1",
     "react-js-cron": "^5.0.1",
+    "resend": "^3.4.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"

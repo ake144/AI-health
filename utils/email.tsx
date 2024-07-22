@@ -1,19 +1,21 @@
-import mailgun from 'mailgun-js';
 
-const mg = mailgun({
-  apiKey: process.env.MAILGUN_API_KEY || '',
-  domain: process.env.MAILGUN_DOMAIN  || '',
-});
+import { Resend } from 'resend';
 
-const sendEmail = (to:any, subject:any, text:string) => {
-  const data = {
-    from: 'Your Name <your-email@your-domain.com>',
-    to,
-    subject,
-    text,
-  };
+const resend = new Resend(process.env.RESEND_API_KEY || '');
 
-  return mg.messages().send(data);
+export const sendActivityNotification = async (email: string, dates: string[]) => {
+  const subject = "Your Scheduled Activities";
+  const text = `Hi there, here are your scheduled activities:\n\n${dates.join('\n')}`;
+
+  try {
+    await resend.emails.send({
+      to: email,
+      from: 'no-reply@ai-health.com',   
+      subject: subject,
+      text: text,
+    });
+    console.log(`Email sent to ${email}`);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
 };
-
-export default sendEmail;

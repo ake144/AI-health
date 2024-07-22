@@ -1,3 +1,5 @@
+
+
 import React from 'react'
 import TextReveal from '../magicui/text-reveal'
 import Image from 'next/image'
@@ -7,8 +9,12 @@ import { BoxRevealDemo } from '../box'
 import PricingPage from '../pricing'
 import HowWorks from '../howWorks'
 
-function MainPage() {
+
+function MainPage(req: Request) {
+
+
   return (
+
     <div className='mt-2 mx-7'>
     <div className="z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
       <TextReveal text="For your Health and Fitness Goals in No time" />
@@ -16,7 +22,8 @@ function MainPage() {
             <Image  src="/health.jpg" width={500} height={500} alt="health" /> 
             <AnimatedListDemo  />  
         </div> 
-      
+
+
     </div>
 
     <div>

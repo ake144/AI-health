@@ -104,7 +104,7 @@ export function DatePickerForm() {
           control={form.control}
           name="activityDates"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem className="flex mx-11 flex-col">
               <FormLabel>Activity Dates</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -112,7 +112,7 @@ export function DatePickerForm() {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
+                        "w-[400px]  h-[100px] pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -131,7 +131,7 @@ export function DatePickerForm() {
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
+                      date < new Date() || date > new Date("2030-01-01")
                     }
                     initialFocus
                   />
@@ -144,7 +144,7 @@ export function DatePickerForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit"  className="mx-11">Add</Button>
       </form>
     </Form>
   );
