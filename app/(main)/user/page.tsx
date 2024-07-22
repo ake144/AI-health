@@ -19,9 +19,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select"; // Adjust this import based on your component structure
 import { useUser } from "@clerk/nextjs";
 import { getUserById } from "@/utils/actions/getuser";
-import scheduleEmails from "@/utils/scheduler";
 import { updateUser } from "@/utils/actions/updateUser"; // Ensure the import path is correct
 import Link from "next/link";
+import BMI from "@/components/bmi";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -63,10 +63,7 @@ const UsersInfo = () => {
     defaultValues: userData 
   });
 
-  useEffect(() => {
-    // Start the scheduler
-    scheduleEmails();
-  }, []);
+
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -91,6 +88,9 @@ const UsersInfo = () => {
           Back
         </div>
         </Link> 
+        <div className="bg-white p-8 rounded-lg shadow-md">
+                 <BMI height={userData.height} weight={userData.weight} />
+      </div>
       <h1 className="text-4xl font-bold mb-4">Users Info</h1>
       <p className="text-gray-600 mb-6">By User • Date</p>
       <Form {...form}>
