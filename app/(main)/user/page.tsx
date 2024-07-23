@@ -14,6 +14,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select"; // Adjust this import based on your component structure
@@ -87,12 +92,23 @@ const UsersInfo = () => {
         <div className='mx-2 p-7'>
           Back
         </div>
-        </Link> 
+        </Link>
+
+
         <div className="bg-white p-8 rounded-lg shadow-md">
-                 <BMI height={userData.height} weight={userData.weight} />
+              <Popover>
+              <PopoverTrigger>
+                <Button  type="button" >
+                Calculate BMI
+                </Button>
+                </PopoverTrigger>
+              <PopoverContent><BMI height={userData.height} weight={userData.weight} /></PopoverContent>
+            </Popover>
+        
+                 
       </div>
+      <div  className="mx-11 my-4 ">
       <h1 className="text-4xl font-bold mb-4">Users Info</h1>
-      <p className="text-gray-600 mb-6">By User • Date</p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -229,6 +245,8 @@ const UsersInfo = () => {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
+
+      </div>
     </div>
   );
 };

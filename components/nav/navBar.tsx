@@ -31,7 +31,7 @@ export function NavigationMenuDemo() {
     <NavigationMenu>
       <NavigationMenuList >
         <NavigationMenuItem>
-              <NavigationMenuLink  href='/'>Getting started</NavigationMenuLink>
+              <NavigationMenuLink  href='/personal'>Get Recommendations</NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
             <NavigationMenuLink href="/user" className={navigationMenuTriggerStyle()}>
@@ -47,7 +47,6 @@ export function NavigationMenuDemo() {
          
         </NavigationMenuItem>
 
-     
         <NavigationMenuItem>
          
          <NavigationMenuLink   href='/calendar' className="mx-3">

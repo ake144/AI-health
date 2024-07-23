@@ -1,4 +1,4 @@
-import { UserInfo } from '@/components/form/input'
+import { Recommendations } from '@/components/form/input'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React from 'react'
@@ -12,8 +12,8 @@ function page() {
         </Link> 
  
     <div className='flex justify-center mt-7  mx-5'>
-     
-   <UserInfo  />
+      
+          <Recommendations  />
    <div>
    </div>
     </div>
