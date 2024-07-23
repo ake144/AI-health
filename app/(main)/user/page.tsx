@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Toaster } from "@/components/ui/toaster"
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select"; // Adjust this import based on your component structure
@@ -27,6 +28,7 @@ import { getUserById } from "@/utils/actions/getuser";
 import { updateUser } from "@/utils/actions/updateUser"; // Ensure the import path is correct
 import Link from "next/link";
 import BMI from "@/components/bmi";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -52,6 +54,7 @@ const formSchema = z.object({
 const UsersInfo = () => {
   const { user, isLoaded, isSignedIn } = useUser();
   const [userData, setUserData] = useState<any>(null);
+  const { toast } = useToast()
 
   useEffect(() => {
     if (isSignedIn && isLoaded) {
@@ -77,8 +80,18 @@ const UsersInfo = () => {
         ...data
       });
       console.log("response",response);
+      toast({
+        title: "user updated  successfully.",
+        description: "the data to update user was sent correctly",
+      })    
+
+
     } catch (error) {
       console.error('Error updating user:', error);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem while sending your data.",
+      })
     }
   };
 
